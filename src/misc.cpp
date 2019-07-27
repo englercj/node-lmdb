@@ -193,13 +193,6 @@ Local<Value> keyToHandle(MDB_val &key, NodeLmdbKeyType keyType) {
     }
 }
 
-Local<Value> valToStringUnsafe(MDB_val &data) {
-    auto resource = new CustomExternalStringResource(&data);
-    auto str = Nan::New<v8::String>(resource);
-
-    return str.ToLocalChecked();
-}
-
 Local<Value> valToString(MDB_val &data) {
     // UTF-16 buffer
     const uint16_t *buffer = reinterpret_cast<const uint16_t*>(data.mv_data);
@@ -222,17 +215,6 @@ Local<Value> valToBinary(MDB_val &data) {
     return Nan::CopyBuffer(
         (char*)data.mv_data,
         data.mv_size
-    ).ToLocalChecked();
-}
-
-Local<Value> valToBinaryUnsafe(MDB_val &data) {
-    return Nan::NewBuffer(
-        (char*)data.mv_data,
-        data.mv_size,
-        [](char *, void *) {
-            // Data belongs to LMDB, we shouldn't free it here
-        },
-        nullptr
     ).ToLocalChecked();
 }
 

@@ -72,9 +72,7 @@ NodeLmdbKeyType keyTypeFromOptions(const Local<Value> &val, NodeLmdbKeyType defa
 Local<Value> keyToHandle(MDB_val &key, NodeLmdbKeyType keyType);
 
 Local<Value> valToString(MDB_val &data);
-Local<Value> valToStringUnsafe(MDB_val &data);
 Local<Value> valToBinary(MDB_val &data);
-Local<Value> valToBinaryUnsafe(MDB_val &data);
 Local<Value> valToNumber(MDB_val &data);
 Local<Value> valToBoolean(MDB_val &data);
 
@@ -296,18 +294,6 @@ public:
     static NAN_METHOD(getString);
 
     /*
-        Gets string data (JavaScript string type) associated with the given key from a database. You need to open a database in the environment to use this.
-        This method is zero-copy and the return value can only be used until the next put operation or until the transaction is committed or aborted.
-        (Wrapper for `mdb_get`)
-
-        Parameters:
-
-        * database instance created with calling `openDbi()` on an `Env` instance
-        * key for which the value is retrieved
-    */
-    static NAN_METHOD(getStringUnsafe);
-
-    /*
         Gets binary data (Node.js Buffer) associated with the given key from a database. You need to open a database in the environment to use this.
         This method is not zero-copy and the return value will usable as long as there is a reference to it.
         (Wrapper for `mdb_get`)
@@ -318,18 +304,6 @@ public:
         * key for which the value is retrieved
     */
     static NAN_METHOD(getBinary);
-
-    /*
-        Gets binary data (Node.js Buffer) associated with the given key from a database. You need to open a database in the environment to use this.
-        This method is zero-copy and the return value can only be used until the next put operation or until the transaction is committed or aborted.
-        (Wrapper for `mdb_get`)
-
-        Parameters:
-
-        * database instance created with calling `openDbi()` on an `Env` instance
-        * key for which the value is retrieved
-    */
-    static NAN_METHOD(getBinaryUnsafe);
 
     /*
         Gets number data (JavaScript number type) associated with the given key from a database. You need to open a database in the environment to use this.
@@ -544,17 +518,6 @@ public:
 
     /*
         Gets the current key-data pair that the cursor is pointing to. Returns the current key.
-        This method is zero-copy and the value can only be used until the next put operation or until the transaction is committed or aborted.
-        (Wrapper for `mdb_cursor_get`)
-
-        Parameters:
-
-        * Callback that accepts the key and value
-    */
-    static NAN_METHOD(getCurrentStringUnsafe);
-
-    /*
-        Gets the current key-data pair that the cursor is pointing to. Returns the current key.
         (Wrapper for `mdb_cursor_get`)
 
         Parameters:
@@ -562,18 +525,6 @@ public:
         * Callback that accepts the key and value
     */
     static NAN_METHOD(getCurrentBinary);
-
-
-    /*
-        Gets the current key-data pair with zero-copy that the cursor is pointing to. Returns the current key.
-        This method is zero-copy and the value can only be used until the next put operation or until the transaction is committed or aborted.
-        (Wrapper for `mdb_cursor_get`)
-
-        Parameters:
-
-        * Callback that accepts the key and value
-    */
-    static NAN_METHOD(getCurrentBinaryUnsafe);
 
     /*
         Gets the current key-data pair that the cursor is pointing to. Returns the current key.
@@ -675,7 +626,7 @@ public:
 };
 
 // External string resource that glues MDB_val and v8::String
-class CustomExternalStringResource : public String::ExternalStringResource {
+class CustomExternalStringResource {
 private:
     const uint16_t *d;
     size_t l;

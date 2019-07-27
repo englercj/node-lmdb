@@ -232,16 +232,8 @@ NAN_METHOD(CursorWrap::getCurrentString) {
     return getCommon(info, MDB_GET_CURRENT, nullptr, nullptr, nullptr, valToString);
 }
 
-NAN_METHOD(CursorWrap::getCurrentStringUnsafe) {
-    return getCommon(info, MDB_GET_CURRENT, nullptr, nullptr, nullptr, valToStringUnsafe);
-}
-
 NAN_METHOD(CursorWrap::getCurrentBinary) {
     return getCommon(info, MDB_GET_CURRENT, nullptr, nullptr, nullptr, valToBinary);
-}
-
-NAN_METHOD(CursorWrap::getCurrentBinaryUnsafe) {
-    return getCommon(info, MDB_GET_CURRENT, nullptr, nullptr, nullptr, valToBinaryUnsafe);
 }
 
 NAN_METHOD(CursorWrap::getCurrentNumber) {
@@ -358,9 +350,7 @@ void CursorWrap::setupExports(Local<Object> exports) {
     // CursorWrap: Add functions to the prototype
     cursorTpl->PrototypeTemplate()->Set(Nan::New<String>("close").ToLocalChecked(), Nan::New<FunctionTemplate>(CursorWrap::close));
     cursorTpl->PrototypeTemplate()->Set(Nan::New<String>("getCurrentString").ToLocalChecked(), Nan::New<FunctionTemplate>(CursorWrap::getCurrentString));
-    cursorTpl->PrototypeTemplate()->Set(Nan::New<String>("getCurrentStringUnsafe").ToLocalChecked(), Nan::New<FunctionTemplate>(CursorWrap::getCurrentStringUnsafe));
     cursorTpl->PrototypeTemplate()->Set(Nan::New<String>("getCurrentBinary").ToLocalChecked(), Nan::New<FunctionTemplate>(CursorWrap::getCurrentBinary));
-    cursorTpl->PrototypeTemplate()->Set(Nan::New<String>("getCurrentBinaryUnsafe").ToLocalChecked(), Nan::New<FunctionTemplate>(CursorWrap::getCurrentBinaryUnsafe));
     cursorTpl->PrototypeTemplate()->Set(Nan::New<String>("getCurrentNumber").ToLocalChecked(), Nan::New<FunctionTemplate>(CursorWrap::getCurrentNumber));
     cursorTpl->PrototypeTemplate()->Set(Nan::New<String>("getCurrentBoolean").ToLocalChecked(), Nan::New<FunctionTemplate>(CursorWrap::getCurrentBoolean));
     cursorTpl->PrototypeTemplate()->Set(Nan::New<String>("goToFirst").ToLocalChecked(), Nan::New<FunctionTemplate>(CursorWrap::goToFirst));
